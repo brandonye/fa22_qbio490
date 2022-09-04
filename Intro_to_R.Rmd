@@ -1,0 +1,559 @@
+---
+title: "A Beginner's Guide to Programming in R"
+author: Nicole Black
+date: 07/13/22
+---
+
+Welcome to RStudio and to your first QBIO490 coding activity! This document will take you through the basics of R before we jump right into our analyses. You may work on this at your own pace, or follow along as we complete it together as a class.
+
+###### (1) R Notebooks vs R Scripts
+
+This file is something called an R Notebook. R Notebooks are great learning tools as they allow for plain-text and code blocks to be interspersed among each other. Here's an example of a code block:
+
+```{r Exercise 1.1}
+print("This is a code block!")
+```
+
+To run a code block in an R Notebook, simply hit the green arrow button in the top right of the block. Your code will run, and any outputs will be shown below the code block as well as in your console (down below). To avoid your file getting too messy, you can collapse any unnecessary outputs by clicking the double up arrow button in the top right of the output block.
+
+In contrast to an R Notebook, an R Script is just a normal coding file. There are no code blocks or plain-text sections, just a typical file with code and comments as needed. This is what you'll be coding in once we get a little further into the semester. To run an R script, there is a run button in the top right corner of the window, or you can use the keyboard shortcut command-enter or ctrl-enter (this short cut also works in R Notebooks). When using this shortcut, you can also highlight line(s) to run only specific pieces of code.
+
+For now, the advantages of an R Notebook as a learning document are the plain text sections as well as the implementation where code blocks can be run independently and interactively, with the visible output blocks conveniently below the code chunks. 
+
+Now that you understand what R file types we will be using this semester, let's get started learning R!
+
+###### (2) Setting Up Your Environment
+
+When you first open a document, you want to make sure that your working directory is properly set. This allows you to both access files on your local machine, and to write files back onto that machine.
+
+To figure out where you are, use getwd(). This is equivalent to pwd in Unix.
+
+```{r Exercise 1.1}
+getwd()
+```
+
+To set your directory, type setwd("/PATH/TO/DIRECTORY"). This is similar to cd in Unix, except you need to use quotes around the directory.
+
+```{r Exercise 2.2 - don't actually run this!!}
+setwd() # (ex: "/Users/nicoleblack/Desktop/qbio_490_nicole/week3_R")
+
+## for R Notebooks, don't actually do this! Keep reading...
+```
+
+Specifically for R Notebooks, setting a working directory is a bit funky. Make sure you understand setwd() since this is the command you will use when working in R scripts, but for all notebooks from now on, just add your path into the R Setup chunk as seen below. Don't worry about remembering the syntax of this chunk, I'll add it for you.
+
+```{r setup Exercise 2.2 Cont.}
+    knitr::opts_knit$set(root.dir = normalizePath("/Users/brandonye/Desktop/Fa22/QBIO490/fa22_qbio_490_brandon")) 
+```
+
+Now that your environment is set up, let's get into coding!
+
+###### (3) Variables
+
+A variable is an container that stores data within your program. In R, you do not have to specify your data type. To declare a variable, simply state the name, use '<-', then specify the data you want to store. Based on the examples below, create your own variable called "my_var", then run the code block below to see the output!
+
+```{r Exercise 3.1}
+var_string <- "hello world!"
+var_num <- 23
+var_vector <- c(3, 2, 1)
+## add your new variable here!
+my_var <- "test"
+print(my_var)
+```
+
+Even though we don't need to specify data types in R, they still exist in the language, so let's learn a few common ones.
+
+```{r Exercise 3.2}
+## undefined values
+## create an undefined value in two different ways
+null <- NULL
+na <- NA
+
+## a boolean value is either true or false
+## booleans can be defined in a variety of ways in R!
+true_var <- TRUE
+false_var <- FALSE
+
+## numeric is a catch all for any number value in R
+negative <- -9
+decimal <- 10.4
+
+## a string is any text value
+## strings can be enclosed in single or double quote
+string_var <- "this is a string"
+char_var <- "c"
+
+## vectors contain data elements of the same data type
+## they are declared by enclosing elements in c()
+vector <- c(1, 2, 3, 4, 5, 1) 
+
+## a factor is a categorical variable
+## a factor has data elements (defined like a vector) and categories (known also as levels), that are inferred from the data 
+factor <- factor(vector) 
+factor
+```
+
+There's one more very important data type (the data frame/matrix) that we'll get to later on in this notebook, but for now, a quick word on variable naming:
+
+```{r 3.3 - Note on Naming}
+## great names:
+sum_of_ages <- sum(numeric_vector) # snake case
+sumOfAges <- sum(numeric_vector) # camel case
+
+## fine names:
+AgeSum <- sum(numeric_vector)
+sum.of.ages <- sum(numeric_vector)
+
+## bad names:
+sum <- sum(numeric_vector)
+s <- sum(numeric_vector)
+sumofages <- sum(numeric_vector)
+SUMOFAGES <- sum(numeric_vector)
+```
+
+Now that you're an expert on variables in R, let's try it out!
+
+Create four variables named 'name', 'age', 'birthday' (in a MM/DD/YYYY format), and 'three_fav_colors'. Print by writing out the name of each variable. What data types are these (use typeof() to validate)?
+
+```{r Exercise 3.4}
+## add code here!
+name <- "Brandon"
+age <- 18
+birthday <- "10/06/2003"
+three_fav_colors <- c("blue", "green", "purple")
+```
+
+###### (4) Functions
+
+Functions perform repeatable actions on the parameters passed into them. There are three important components to a function:
+
+1. Name
+    ~ All functions have a name that is used to call them
+    
+2. Arguments (parameters)
+    ~ An argument is passed into a function. A function can have any number of arguments, including 0, depending on the function definition
+    
+3. Return value
+    ~ The return value is the output of the function.
+    
+To call a function, use the syntax: return_value <- function_name(arg1, arg2, arg3)
+Note that it can be helpful to save the return value to a variable, as shown above, but it isn't always necessary.
+
+```{r Exercise 4.1}
+sum(3, 4, 5) ## calling the function without saving the output automatically prints to the console
+
+max_value <- max(1, 10, 100) ## storing to a variable does not automatically print
+max_value
+```
+
+Call the following functions on the list of numbers below: sum(), min(), mean(), mode(), summary()
+
+```{r Exercise 4.2}
+list_of_numbers <- c(1, 1, 2, 3, 5, 8, 13, 21)
+
+## call functions here
+```
+
+###### (5) Logic and Control Flow
+
+Control flow allows you to run certain chunks of code under particular situations. We can do this by implementing logical statements. Logical statements are statements of equality that evaluate as booleans to either TRUE or FALSE. For example, if our logical statement is TRUE, we can then control flow to run chunk 'A' of code, and if our logical statement is FALSE, we could use that same control flow to run chunk 'B'.
+
+Below are common operators used in logical statements in R. Run each statement to see what it evaluates to.
+
+```{r Exercise 5.1}
+"QBIO" == "QBIO" ## is equal to
+"USC" != "UCLA" ## is not equal to
+10 > 9 ## greater than
+1 < 2 ## less than
+8 >= 3 ## greater than or equal to
+4 <= 7 ## less than or equal to
+100 %in% c(10, 100, 1000, 10000) ## is present in a vector/list
+```
+
+You can also link multiple logical statements using AND (&), OR (|), or NOT (!)
+
+Predict what each statement will evaluate to:
+
+```{r Exercise 5.2}
+"cat" == "cat" & "dog" == "dog" # prediction: 
+"cat" == "cat" & "fish" == "hamster" # prediction: 
+
+1 < 2 | 3 < 1 # prediction: 
+1 < 2 | 3 < 5 # prediction: 
+
+"blue" %in% c("yellow", "red", "blue") &! "happy" %in% c("sad", "angry")
+# prediction: 
+```
+
+"If" statements (along with "else if" and "else" statements) are the most simple control flows to write, and they are also what we will use the majority of the time.
+
+The syntax for "if", "else if", and "else" statements is as follows. Fill in conditions and actions so that the "if" statement is skipped, and the "else if" runs, printing out "Success!". Run the block to test.
+
+```{r Exercise 5.3}
+if (condition) {
+  # action
+} else if (condition) {
+  # action
+} else {
+  # action
+}
+```
+
+An "if" block can be used alone, in conjunction with an "else" block, or in conjunction with any number of "else if" blocks that can end in up to one "else" block. Note that you cannot have an "else if" or an "else" block without an "if" statement. These blocks are executed in order until one expression is true. At a true expression, the contents of the block runs, and the control flow is exited (ie none of the below blocks are tested).
+
+Sometimes using "if... else if... else" doesn't work. You might get the error code: "the condition has length > 1". This is because an if statement only checks ONE element to evaluate the condition. To performs an element-wise evaluation on a vector, we must use ifelse(), a vectorized function. The syntax is follows:
+
+```{r 5.4 - syntax of ifelse() and nested ifelse()}
+ifelse(expression, x, y) # where x happens if the expression is true, and y happens if it is false
+
+ifelse(expression1, x, ifelse(expression2, y, ifelse(expression3, z, a)))
+```
+
+Predict the outcome of the following control flow, then run the code block to confirm your prediction.
+
+```{r Exercise 5.5}
+
+new_list <- c("starbucks", "elephant", 232, "magenta", -10)
+
+if (7.5 %in% new_list) {
+  print("A")
+  if (!7.5 %in% new_list) {
+    print ("B")
+  }
+} else if  (!(232 %in% new_list)) {
+  print("C")
+} else if ("starbucks" %in% new_list &! 9 > 10) {
+  print("D")
+  if (100 < 1 | "elephant" %in% new_list) {
+    print("E")
+  }
+  else if ("magenta" %in% new_list) {
+    print("F")
+  }
+} else {
+  print("G")
+}
+```
+
+###### (6) Loops
+
+If you want to do one action multiple times or run the same operation on a large number of items, a loop can be utilized to avoid repetitive code. There are two main types of loops: "while loops" and "for loops"
+
+While loops are like if statements that repeat multiple times until the condition is no longer true. The syntax is as follows:
+
+```{r Exercise 6.1 - syntax of a while loop}
+while (condition) {
+  # do something
+  # update condition
+}
+```
+
+Here's an example:
+
+```{r Exercise 6.2}
+i = 1
+while (i < 10) {
+  print(i)
+  i = i + 2
+}
+```
+
+Starting with x = 0, write a while loop that returns the mean of 1, 10, and x until that average is greater than 10. Each time the loop runs, increment x by 1.
+
+```{r Exercise 6.3}
+x = 0
+my_list <- c(1, 10, x)
+mean <- mean(my_list)
+while (condition) {
+  # do something
+  # update condition
+}
+```
+
+The other type of commonly used loop is a for loop. In R and Python, you can think of a for loop as doing something for each element in some list. The syntax is as follows:
+
+```{r 6.4 - syntax of a for loop}
+for (i in list) {
+  # do something
+}
+```
+
+Here's an example:
+
+```{r Exercise 6.5}
+list <- c(2, 4, 6, 8)
+
+for (element in list) { # note that I can call "element" whatever I want, it like a temporary variable that stores the list's item
+  print (element * 2)
+}
+```
+
+Write a for loop that prints the cube of each item in the list "list":
+
+```{r Exercise 6.6}
+list <- c(1, 5, 20, 0)
+
+# write loop here
+```
+
+You can also use a for loop to run code a specified number of times by using a sequence (ex: 1:5) instead of a list. The syntax is as follows:
+
+```{r 6.7 - syntax of a for loop}
+for (i in 1:10) {
+  # do something
+}
+```
+
+Use this syntax to print all numbers between -7 and 7.
+
+```{r Exercise 6.8}
+# write loop here
+
+```
+
+VERY IMPORTANT NOTE: In R, we generally want to avoid using loops since they are fairly slow and because R is already optimized for repeating actions on any lists/vectors. However, there are certain instances where loops must be used, so if you absolutely cannot think of any other solution, a loop is always a good backup.
+
+We'll get into this more when we talk about vectorization in the next section, but you can use certain built-in functions to avoid looping. For example, say we wanted to sum up the elements in a list. We could write a for loop, or we could use the sum() function.
+
+```{r Exercise 6.9}
+list <- c(1, 10, 100) 
+
+# using a loop
+sum_loop <- 0
+for (i in list) {
+  sum_loop = sum_loop + i
+}
+
+# using a function
+sum_func <- sum(list)
+
+# they are the same!
+sum_loop
+sum_func
+
+sum_loop == sum_func
+```
+
+Some good functions to use when avoiding loops are sum(), rowsum(), colsum(), and ifelse().
+
+###### (7) Vectors
+
+Vectors are lists where all of the objects have the same data type. Recall from the "variables" section that vectors are defined using "c()".
+
+You can access an item in a vector using bracket notation as follows;
+
+```{r Exercise 7.1}
+vector <- c("CSCI102", "CSCI103", "CSCI104")
+
+vector[3] ## remember that R is a one indexed language, so we start counting from 1 (not 0)
+```
+
+The reason why vectors are so import for us is that R is a vectorized language, meaning it is specifically set up to work well with vectorized data. Many of the built in functions work just the same on vectorized objects as they do on individual objects. Hence, we should always try to utilize these functions on vectors rather than doing the same work with a loop working on an individual object.
+
+Let's explore this further (you don't need to fully understand everything here quite yet, just look at the comments for help):
+
+```{r Exercise 7.2}
+vector <- 1:10^6 # here's a huge vector (all numbers between 1 and 10^6)
+
+loop_sum <- function(vector) { # here, I created a user-defined function that sums up the elements in "vector" using a loop
+  x=0
+  for (i in vector) {
+    x = x + i
+  }
+  return(x)
+}
+
+function_sum <- sum(vector) # here, we sum up the elements in "vector" using a built-in vectorized function
+
+loop_sum(vector) == function_sum # tests that these are equal
+```
+
+It is clear that the function notation is much simpler and easier to understand than the loop notation, but we can see another clear reason to use vectorization over loops when we explore run time: 
+
+```{r Exercise 7.3}
+install.packages("rbenchmark")
+library(rbenchmark) # this library allows us to use the benchmark function to explore run time
+
+print(benchmark(
+  vectorized = function_sum, #this compares the vectorized sum (function_sum)...
+  loop = loop_sum(vector), # to the loop sum (loop_sum)
+  replications = 100
+))
+```
+
+We can see that the loop implementation takes 1.741x as long as the vectorized implementation. When we are running (numerous) even more intensive implementations, this can significantly impact our run time.
+
+###### (8) Data frames
+
+Going back to variables and object types, data frames are objects that store two-dimensional representations of data, often with row and column names. Data frames are the bread and butter of data analysis in R!
+
+Let's explore the built in mtcars data frame to learn about this crucial data type.
+
+First, load in the data frame by running the following line of code. "mtcars" will then show up under "Data" in your environment panel.
+
+```{r Exercise 8.1}
+data(mtcars)
+```
+
+The easiest way to view a data frame is to simply click on it! This will open up the matrix in a new tab. You can then explore the data visually.
+
+However, this is not always helpful, especially when looking at larger or more complex data frames. We can use head() and str() to give us a better view in the console itself.
+
+```{r Exercise 8.2}
+head(mtcars) # just like in the terminal, you can use head to view the first few rows of a data frame
+```
+
+Here we can see the first 6 rows of the mtcars data frame. We can see the row names (Mazda RX4, Mazda RX4 Wag, etc.), the column names (mpg, cyl, disp, etc.), and the data types associated with each column (dbl: double-precision floating point number).
+
+```{r Exercise 8.3}
+str(mtcars) # str stands for structure
+```
+
+Running str() will give us info about the structure of the data frame. We can see the data type (data.frame), the number of rows (obs.) and columns (variables), the general data type of each column (num), and a preview of the data in each column.
+
+Note the "$" before each column name. In R, the dollar sign always refers to columns.
+We can view a singular column with the notation: df_name$row_name
+
+Use this syntax to view the mpg column of the mtcars data frame.
+
+```{r Exercise 8.4}
+# add code here
+```
+
+What if we want to view a column, but don't know it's exact name? We can get all column names (or all row names) by using the functions colnames() and rownames(). Call those below, then view the carburetor column using dollar sign notation.
+
+```{r Exercise 8.5}
+# call functions here
+
+mtcars$carburetor_column_name # fill in name of carburetor column here
+```
+
+We can also view particular subsets of the data frame by using the df[row, column] notation.
+
+```{r Exercise 8.6}
+mtcars[2, 4] # access the value from the second row, fourth column (this is the horsepower of a Mazda RX4 Wag)
+
+mtcars[1, ] # access all values in the first row (all info on the Mazda RX4)
+
+mtcars[ , 1] # access all values in the first column (mpg info for all cars)
+
+mtcars[1:5, c(1, 4, 6)] # rows one through five and columns 1, 4, and 6
+
+mtcars[-(3:30), ] # access everything EXCEPT rows 3 through 30
+
+mtcars[ , c(-(1:4), -6)] # access everything EXCEPT columns 1 through 4 and column 6
+```
+
+Select the horse power data for the Duster 360, Lincoln Continental, and Maserati Bora. Instead of manually viewing the matrix to determine which rows and column numbers you want to specify, use rownames() and colnames().
+
+```{r Exercise 8.7}
+# write code here
+```
+
+###### (9) Editing data frames
+
+Oftentimes we want to edit data frames to add calculated columns, delete unnecessary rows, subset to a particular view, etc.
+
+You can create a column using the "$" notation to specify the new column name, and "<-" to assign some values to the new column. The syntax is as follows:
+
+```{r Exercise 9.1}
+data_frame$new_column <- values
+```
+
+Let's try this out! In the mtcars data frame, there is a column called "am". This column holds transmission information where 0 = automatic, and 1 = manual. But as of now, this isn't very clear without knowing that information.
+
+Create a new column called "transmission" that assigns the value "automatic" where am = 0, and "manual" where am = 1.
+
+You can use an ifelse statement to assign your values! Remember, ifelse() takes in three arguments: ifelse(test_condition, yes, no)
+
+```{r Exercise 9.2}
+# write code here
+```
+
+Now that we have the "transmission" column, the "am" column is no longer particularly useful. Let's delete it.
+
+You can easily delete a row/column by subsetting around it using df[row, column] notation. Simply choose all of the rows/columns you want to keep (ignoring the ones you want to delete), and assign the subset to either the original data frame variable (to permanently delete the rows/columns), or to a new variable storing an edited copy of the data frame. In general, it is best to create a copy that way you always have access to your original unedited data frame if needed.
+
+The syntax is as follows:
+
+```{r Exercise 9.3}
+df_copy <- df[rows_to_keep, columns_to_keep]
+```
+
+Use the above syntax to save a copy of the mtcars data without the "am" column. Remember to use colnames() to find the column number of "am". Also recall that to select row/columns to drop (hence selecting everything else), you can use "-index #".
+
+```{r Exercise 9.4}
+# write code here
+```
+
+View your new mtcars copy data frame to check that the "am" column was dropped.
+
+```{r Exercise 9.5}
+# write code here
+```
+
+###### (10) Installing Packages
+
+A package (or library) contains a group of functions that are not implemented in the base installation of R. Especially for bioinformatics and computational biology uses, there are lots of great packages with helpful functions for analysis.
+
+To install and load a package, use the following syntax:
+
+```{r}
+if (!require(package)){ # you only need to install a package once, this checks to see if it has already been installed
+install.packages("package")
+}
+
+library(package) # you need to load in a package in every file that uses it (it's good practice to run all package related lines at the top of your file)
+```
+
+In our next class, we will be using the BiocManager and TCGAbiolinks packages. Go ahead and run the following lines to install and load those packages (it might take a while!)
+
+If it asks "Update all/some/none? [a/s/n]:" type "a"
+If it asks "Do you want to install from sources the package which needs compilation (Yes/no/cancel)" type "Yes
+
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+    BiocManager::install(version = "3.15")
+
+library(BiocManager)
+
+if (!require("TCGAbiolinks", quietly = TRUE)) 
+    BiocManager::install("TCGAbiolinks") # notice this is different from the typical "install.packages" command. that's because BiocManager is necessary to install and manage packages from the Bioconductor project
+
+library(TCGAbiolinks)
+```
+
+###### (11) Getting Help
+
+Forget how to use a function? No worries! Here are three ways to get info when you need it:
+
+1. "?function_name" or "help(function_name)": brings up help tab for the function (see bottom right panel) 
+2. args(function_name): gives arguments for the function
+3. Google!
+
+Try this out on the is.na() function (you'll need this in your homework)
+
+```{r}
+# write code here
+```
+
+###### (12) Further Practice
+
+Pull the R_Tutorial.Rmd file (in week3_r) from the course materials repo. That file will take your through some more practice exercises.
+
+For even more practice, use swirl(), a packages that holds multiple courses on R basics, statistics, and data analysis.
+
+To use swirl, open up an R Script file (use the plus button in the top left corner of RStudio). Then run the following commands.
+
+```{r}
+if (!require(swirl)){
+install.packages("swirl")
+}
+
+library(swirl)
+install_course_github("swirldev", "R_Programming_E")
+swirl()
+```
+
+To get extra credit, email completed assignments to "blackn@usc.edu" when prompted. You will receive 0.25 points for completion of any swirl exercise, with a max of 5 points to be added to your homework grade.

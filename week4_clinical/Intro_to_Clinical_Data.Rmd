@@ -87,6 +87,8 @@ View the vital status column. What two notations can be used to view columns?
 ```{r Exercise 3.3}
 # write code here
 clinical$vital_status
+
+
 ```
 
 ###### (4) Plotting

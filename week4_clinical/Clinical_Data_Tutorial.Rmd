@@ -128,20 +128,19 @@ library(ggplot2)
 
 To create a KM plot, we need three sets of data: survival_time, death_event, and a grouping variable (in this case, age_category).
 
-Let's create a column in clinical called survival_time. For some patients, we can find survival time using their days_to_death info. But for others, namely those who never had a registered death event (ie days_to_death = NA), our best estimate becomes days_to_last_follow_up, since that is the longest definitive time we can say they survived. Using the days_to_death and days_to_last_follow_up columns, create a survival_time column in the clinical data frame.
+Let's create a column in clinical called survival_time. For some patients, we can find survival time using their days_to_death info. But for others, namely those who never had a registered death event (ie days_to_death = NA), our best estimate becomes days_to_last_follow_up, since that is the longest definitive time we can say they survived. Using the days_to_death and days_to_last_followup columns, create a survival_time column in the clinical data frame.
 
 ```{r}
 # write code here 
 # HINT: use ifelse() and is.na()
-
-clinical$survival_time <- ifelse(!is.na(clinical$days_to_death), clinical$days_to_death, clinical$days_to_last_followup)
+clinical$survival_time <- ifelse(is.na(clinical$days_to_death), clinical$days_to_last_followup, clinical$days_to_death)
 ```
 
 Next, create the death_event column. This column will store a boolean variable that is TRUE if there was a death event, or FALSE if there was no recorded event. You can use the vital_status column and an ifelse() statement to make this column.
 
 ```{r}
 # write code here
-clinical$death_event <- ifelse(clinical$vital_status == "dead", TRUE, FALSE)
+clinical$death_event <- ifelse(clinical$vital_status == "Dead", TRUE, FALSE)
 ```
 
 Now we can perform our analysis! Read the Help info for each function, then fill in the blanks with the columns you created (age_category, survival_time, death_event).
@@ -179,6 +178,8 @@ KM_plot_age
 
 Take a moment to look at your plot and try to understand what it is saying. Write some observations/key takeaways below:
 
+Those patients that are "young" (<50 yo) have better survival outcomes across essentially all time periods.
+
 ###### (4) Saving files
 
 In this tutorial you explored the clinical data frame, you practiced boolean indexing, and you created a Kaplan-Meier plot.
@@ -190,7 +191,7 @@ Remember, you can use write.csv() to save a data frame to a .csv file, and you c
 ```{r}
 # change the file path! make sure it's in your week4 folder
 # we set row.names to false since the first row doesn't contain row name info
-write.csv(clinical, "/PATH/TO/DESTINATION/brca_clinical_data.csv", row.names = FALSE)
+write.csv(clinical, "/Users/brandonye/Desktop/fa22/QBIO490/fa22_qbio_490_brandon/week4_clinical/brca_clinical_data.csv", row.names = FALSE)
 ```
 
 

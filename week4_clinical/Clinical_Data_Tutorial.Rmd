@@ -37,11 +37,12 @@ Look up "early onset breast cancer" in Google Scholar and pick a paper to skim.
     2. What is one thing you learned from this paper: 
     
 Let's start with an overview of the age data. Run the following functions on the age_at_initial_pathologic_diagnosis column. Record the output below.
-    1. min() = 
-    2. max() = 
-    3. mean() = 
-    4. median() = 
-    5. summary() = 
+    1. min() = 26
+    2. max() = 90
+    3. mean() = 58.77087
+    4. median() = 59
+    5. summary() = Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+                  26.00   49.00   59.00   58.77   68.00   90.00 
 
 ```{r}
 # write code here

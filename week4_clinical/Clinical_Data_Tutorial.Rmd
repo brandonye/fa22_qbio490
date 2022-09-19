@@ -104,7 +104,7 @@ The number of rows in the young_clinical data frame added to the number of rows 
 Let's check to make sure that nothing went wrong in our process:
 
 ```{r}
-nrows(clinical) == nrows(old_clinical) + nrows(young_clinical)
+nrow(clinic) == nrow(old_clinic) + nrow(young_clinic)
 ```
 
 The statement you just wrote (x == y) is called an assert statement, and it can be used as a sanity check to make sure that everything is working as it should. You should use assert statements throughout your coding process as checkpoints to avoid going down too far down the wrong path. Write assert statements in the Console since you don't actually need to save any outputs.

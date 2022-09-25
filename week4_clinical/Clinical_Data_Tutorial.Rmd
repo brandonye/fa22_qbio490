@@ -9,7 +9,7 @@ date: 07/17/22
 Set your working environment to analysis_data:
 
 ```{r setup}
-    knitr::opts_knit$set(root.dir = normalizePath("/Users/brandonye/Desktop/fa22/QBIO490/fa22_qbio_490_brandon/analysis_data")) 
+    knitr::opts_knit$set(root.dir = normalizePath("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data")) 
 ```
 
 Load in the BiocManager and TCGAbiolinks packages:

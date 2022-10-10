@@ -1,0 +1,181 @@
+---
+title: "Introduction to RNAseq"
+author: Nicole Black
+date: 07/24/22
+---
+
+```{r setup}
+    knitr::opts_knit$set(root.dir = normalizePath("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data")) 
+```
+
+```{r}
+# install, only if needed, and load packages (SummarizedExperiment and TCGAbiolinks)
+install.packages(SummarizedExperiment)
+library(SummarizedExperiment)
+
+install.packages(TCGAbiolinks)
+library(TCGAbiolinks)
+```
+
+Make sure you have access to rna_se. If it is not already in your workspace (ie already queried, downloaded, and prepared), let Nicole know NOW so we can get you the data a different way.
+
+###### (1) Summarized Experiment Basics
+
+Let's take a look at rna_se (RNA Summarized Experiment). Call head() and str(). Also explore the data frame by double clicking on it from the Environment panel (or calling "View(rna_se)").
+
+```{r Exercise 1.1}
+# write code here
+head(rna_se)
+str(rna_se)
+```
+
+Use the dim() function to find the dimensions of the colData, rowRanges, and unstranded dataframes. Record them below:
+
+  ~ colData (rows, cols): 1226, 87
+  ~ rowRanges: 60660, 10
+  ~ unstranded: 60660, 1226
+
+```{r Exercise 1.2}
+# write code here
+dim(rna_se@colData)
+dim(rna_se@rowRanges@elementMetadata)
+dim(rna_se@assays@data$unstranded)
+```
+
+Run the following code and fill out a description of the rows/columns of our data frames.You can use this as a cheat sheet moving forward.
+  ~ colData
+        - Rows: patients
+        - Columns: info about patients
+  ~ rowRanges
+        - Rows: genes
+        - Columns: info about genes
+  ~ unstranded (in assays)
+        - Rows: genes
+        - Columns: patients
+  
+```{r Exercise 1.3}
+# colData: 
+rownames()
+colnames()
+
+# rowRanges:
+str()
+# what are the rows... use your logic
+
+# for unstranded, don't call anything, just use your logic from exercise 1.2 and and think it through!
+```
+
+###### (2) ColData
+
+View the first 15 values in the age_at_index column.
+
+70 64 54 80 68 84 52 49 40 50 46 62 46 69 78
+
+```{r Exercise 2.1}
+# write code here
+rna_se@colData$age_at_index[1:15]
+```
+
+Call summary on the age_at_index column. Record the output below:
+    
+  Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  26.00   48.00   58.00   58.27   67.00   90.00       1 
+    
+```{r Exercise 2.2}
+# write code here
+summary(rna_se@colData$age_at_index)
+```
+
+Create a data frame called rna_clinical that contains data from colData, except for the NA patient and their data.
+
+```{r Exercise 2.3}
+age_mask <-  ifelse(is.na(rna_se@colData$age_at_index), FALSE, TRUE)
+rna_clinical <-  rna_se@colData[age_mask, ]
+
+summary(rna_clinical) # NA's removed
+
+rna_clinical <- rna_se@colData[!is.na(rna_se@colData$age_at_index), ] 
+```
+
+Use the as.data.frame() function to change this from an S4 object to a data frame object.
+
+```{r Exercise 2.4}
+rna_clinical <- as.data.frame(rna_clinical)
+```
+
+Make a mask and subset out the treatments column.
+
+```{r Exercise 2.5}
+treatments_mask <- ifelse(colnames(rna_clinical) == "treatments" | colnames(rna_clinical) == "disease_type" | colnames(rna_clinical) == "primary_type", FALSE, TRUE)
+rna_clinical <- rna_clinical[,treatments_mask] 
+
+sum(!treatments_mask)
+
+```
+
+Save rna_clinical to your local machine
+
+```{r Exercise 2.6}
+write.csv(rna_clinical, "/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data/brca_rna_clincial_data.csv", row.names = TRUE)
+```
+
+###### (3) RowRanges
+
+Call head() on rowRanges@elementMetadata:
+
+```{r Exercise 3.1}
+# write code here
+head(rna_se@rowRanges@elementMetadata)
+```
+
+Create a data frame called rna_genes that contains data from elementMetadata.
+
+```{r Exercise 3.2}
+rna_genes <- rna_se@rowRanges@elementMetadata
+```
+
+Use the as.data.frame() function to change this from an S4 object to a data frame object
+
+```{r Exercise 3.3}
+rna_genes <- as.data.frame(rna_genes)
+```
+
+Save rna_genes to your local machine.
+
+```{r Exercise 3.4}
+write.csv(rna_genes, "/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data/brca_rna_gene_data.csv", row.names = FALSE)
+```
+
+###### (4) Assays
+
+What are the names of the 6 assays?
+
+```{r Exercise 4.1}
+# access the assays here
+rna_se@assays
+```
+
+Create a new data frame called "rna_counts" that contains the data from unstranded. Recall the patient with NA age data? We need to exclude that patient. We can use the same mask to do this.
+
+```{r Exercise 4.2}
+rna_counts <- rna_se@assays@data$unstranded
+rna_counts_mask <- ifelse(is.na(rna_se@colData$age_at_index), F, T)
+
+rna_counts = rna_counts[,rna_counts_mask]
+rna_counts <- as.data.frame(rna_counts)
+
+rna_counts <- rna_se@assays@data$unstranded[, !age_mask]
+```
+
+Fetch the data for the first 5 patients and the first 15 rows.
+
+```{r Exercise 4.3}
+# write code here
+rna_counts[1:15,1:5]
+```
+
+Save rna_counts to your local machine (warning: this will likely take a while!)
+
+```{r Exercise 4.4}
+write.csv(rna_counts, "/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data/brca_rna_count_data.csv", row.names = TRUE)
+```

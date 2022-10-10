@@ -38,6 +38,16 @@ Load in your saved MAF data by reading in your clinical data, re-preparing maf_q
 # write code here
 clinical <- read.csv("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/analysis_data/brca_clinical_data.csv")
 
+maf_query <- GDCquery(
+    project = "TCGA-BRCA", 
+    data.category = "Simple Nucleotide Variation", 
+    access = "open", # we only have access to somatic mutations which are open access
+    data.type = "Masked Somatic Mutation", 
+    workflow.type = "Aliquot Ensemble Somatic Variant Merging and Masking"
+)
+
+GDCdownload(maf_query)
+
 maf <- GDCprepare(maf_query) # as long as it runs, ignore any errors
 
 maf_object <- read.maf(maf = maf, 

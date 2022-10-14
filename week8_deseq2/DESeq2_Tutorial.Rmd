@@ -47,7 +47,7 @@ Note that in addition to the first few values, we now also see "Levels: old youn
 
 In our analysis we can also control for variables that may skew our comparison. Let's control for stage at diagnosis (using ajcc_pathologic_stage), and one other variable of your choosing.
 
-List your chosen variable here:
+List your chosen variable here: definition
 
 Just like we did to age_category, convert these columns into the factor data type. Then call head and record the levels.
 

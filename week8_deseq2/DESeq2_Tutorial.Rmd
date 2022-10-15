@@ -149,7 +149,7 @@ results <- data.frame(rna_genes$gene_name[gene_mask], rownames(results), results
 
 # HINT: to get the gene names, you will need to create a boolean mask that is T when rna_genes$gene_id %in% results@rownames, and F if otherwise, then use this mask to subset rna_genes$gene_names for only the names that are in the results df
 
-colnames(results) <- c(c("gene_name", "gene_id", "log2foldchange", "pvalue", "padj", "-log10padj")) ## FIX
+colnames(results) <- c("gene_name", "gene_id", "log2foldchange", "pvalue", "padj", "-log10padj") ## FIX
 ```
 
 It's oftentimes most interesting to look at genes that are highly over/under expressed at a significance level p < 0.05. 

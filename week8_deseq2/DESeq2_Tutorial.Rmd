@@ -172,7 +172,7 @@ order_indexes = order(my_df$y) # order by column "y"
 
 order_indexes
 
-my_df = my_df[order_indexes, ] # this rewrites the df based on the sorted rows
+my_df = my_df[order_indexes,] # this rewrites the df based on the sorted rows
 my_df # check your df to see if it is sorted by the y values
 ```
 
@@ -182,7 +182,7 @@ Use the logic above as well as the sig_results mask to create a dataframe called
 up_reg_results <- data.frame(x <- results$gene_name[sig_results], y <- results$log2foldchange[sig_results])
 ordered_indices <- order(-up_reg_results$y)
 
-up_reg_results <- up_reg_results[ordered_indices, ]
+up_reg_results <- up_reg_results[ordered_indices,]
 ```
 
 Rewrite up_sig_results to have only the genes where the log2foldchange is > 1 (ie genes that are 2x or greater expressed in one population over the other).
@@ -200,9 +200,9 @@ Repeat the same steps to create a sorted data frame called down_reg_results (thi
 down_reg_results <- data.frame(x <- results$gene_name[sig_results], y <- results$log2foldchange[sig_results])
 down_ordered_indices <- order(down_reg_results$y)
 
-down_reg_results <- down_reg_results[down_ordered_indices, ]
+down_reg_results <- down_reg_results[down_ordered_indices,]
 down_mask <- ifelse(down_reg_results$y....results.log2foldchange.sig_results. < -1, T, F)
-down_reg_results <- down_reg_results[down_mask, ]
+down_reg_results <- down_reg_results[down_mask,]
 ```
 
 Call head() on both up_reg_results and down_reg_results.

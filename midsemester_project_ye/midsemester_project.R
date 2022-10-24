@@ -20,8 +20,12 @@ library(maftools)
 library(survival)
 library(survminer)
 library(ggplot2)
+  
+# mkdir("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/midsemester_project_ye")
+# dir.create("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/midsemester_project_ye/outputs")
 
 knitr::opts_knit$set(root.dir = normalizePath("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/midsemester_project_ye/outputs")) 
+# setwd("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/midsemester_project_ye/outputs")
 
 # query for clinical data
 clinical_query <- GDCquery(project = "TCGA-BRCA", data.category = "Clinical", file.type = "xml")
@@ -119,9 +123,10 @@ clinical_and_drug$therapy_types <- ifelse(clinical_and_drug$therapy_types == "Ch
                                                                ifelse(clinical_and_drug$therapy_types == "Ancillary", "Ancillary", "Other")))))
 
 # make a grouped countplot that depicts the counts for each therapy type by race
+table(clinical_and_drug["therapy_t"])
 # jpeg("/Users/brandonye/Desktop/fa22/QBIO 490/fa22_qbio_490_brandon/midsemester_project_ye/outputs/countplot_race_therapy.jpeg")
 countplot_race_therapy <- ggplot(clinical_and_drug, aes(x=race_list, fill=therapy_types)) + geom_bar(position="dodge") # construct countplot
-countplot_race_therapy + ylab("Count") + scale_fill_discrete(name="therapy types", labels = c("Chemotherapy", "Hormone Therapy", "Immunotherapy", "Vaccine", "Ancillary", "Other", "NA")) # legend and y-axis
+countplot_race_therapy + xlab("Race") + ylab("Count") + scale_fill_discrete(name="Therapy Types", labels = c("Ancillary", "Chemotherapy", "Hormone Therapy", "Immunotherapy","Other", "Vaccine")) # legend and y-axis
 # dev.off()
 
 # TP53 and PIK3CA are the commonly mutated gene in BRCA patients, and are understood to possibly have antagonistic effects on survival
